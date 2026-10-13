@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Trailmark.Resources.Styles.Colors">
+
+    <!--
+        Light/dark palette. Consumers pair these through
+        {AppThemeBinding Light={StaticResource XLight}, Dark={StaticResource XDark}}
+        so that switching Application.Current.UserAppTheme restyles the app live.
+    -->
+
+    <Color x:Key="BackgroundLight">#F7F8F3</Color>
+    <Color x:Key="BackgroundDark">#121612</Color>
+
+    <Color x:Key="SurfaceLight">#FFFFFF</Color>
+    <Color x:Key="SurfaceDark">#1B211B</Color>
+
+    <Color x:Key="SurfaceAltLight">#EEF0E8</Color>
+    <Color x:Key="SurfaceAltDark">#252C24</Color>
+
+    <Color x:Key="InkLight">#182017</Color>
+    <Color x:Key="InkDark">#EDF2E9</Color>
+
+    <Color x:Key="MutedLight">#657064</Color>
+    <Color x:Key="MutedDark">#A6AFA3</Color>
+
+    <Color x:Key="LineLight">#DFE3DA</Color>
+    <Color x:Key="LineDark">#303930</Color>
+    <SolidColorBrush x:Key="LineBrushLight" Color="#DFE3DA" />
+    <SolidColorBrush x:Key="LineBrushDark" Color="#303930" />
+
+    <Color x:Key="PrimaryLight">#263F29</Color>
+    <Color x:Key="PrimaryDark">#C5E9A0</Color>
+
+    <Color x:Key="OnPrimaryLight">#FFFFFF</Color>
+    <Color x:Key="OnPrimaryDark">#15200E</Color>
+
+    <Color x:Key="AccentSoftLight">#E1F4B8</Color>
+    <Color x:Key="AccentSoftDark">#354925</Color>
+
+    <Color x:Key="OnAccentSoftLight">#3D6222</Color>
+    <Color x:Key="OnAccentSoftDark">#CFE9A8</Color>
+
+    <Color x:Key="SectionAccentLight">#557533</Color>
+    <Color x:Key="SectionAccentDark">#A8D06A</Color>
+
+    <Color x:Key="DangerLight">#B3261E</Color>
+    <Color x:Key="DangerDark">#FFB4AB</Color>
+
+    <Color x:Key="HeroOverlayLight">#78162217</Color>
+    <Color x:Key="HeroOverlayDark">#8C0B120A</Color>
+
+    <!-- Theme independent -->
+    <Color x:Key="Accent">#B5DB68</Color>
+    <Color x:Key="RouteGreen">#658F35</Color>
+</ResourceDictionary>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Trailmark.Views.TrackLibraryPage"
+    x:Name="Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Trailmark.Views.Controls"
+    xmlns:vm="clr-namespace:Trailmark.ViewModels"
+    x:DataType="vm:TrackLibraryViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="../Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,*" Padding="20,12,20,0" RowSpacing="0">
+            <Grid HeightRequest="74" ColumnDefinitions="*,Auto">
+                <Label Text="Track library" Style="{StaticResource PageTitle}" VerticalOptions="Center" />
+                <Button Grid.Column="1" Text="•••" Style="{StaticResource IconButton}" SemanticProperties.Description="Library actions" Command="{Binding MoreActionsCommand}" />
+            </Grid>
+
+            <Border Grid.Row="1" HeightRequest="52" Padding="12,0" StrokeThickness="0" StrokeShape="RoundRectangle 17" BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceAltLight}, Dark={StaticResource SurfaceAltDark}}">
+                <Grid ColumnDefinitions="28,*,38">
+                    <Label Text="⌕" FontSize="25" VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Placeholder="Search tracks" Text="{Binding SearchText}" Style="{StaticResource SearchEntry}" ClearButtonVisibility="WhileEditing" />
+                    <Button Grid.Column="2" Text="≡" WidthRequest="38" HeightRequest="38" Padding="0" CornerRadius="12" BackgroundColor="Transparent" FontSize="20" TextColor="{AppThemeBinding Light={StaticResource InkLight}, Dark={StaticResource InkDark}}" SemanticProperties.Description="Sort tracks" Command="{Binding SortCommand}" />
+                </Grid>
+            </Border>
+
+            <ScrollView Grid.Row="2" Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="0,12,0,0">
+                <HorizontalStackLayout Spacing="8">
+                    <Button Text="Recent" Style="{StaticResource ChipButton}" Command="{Binding SetSortCommand}" CommandParameter="Recent">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsSortRecent}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource AccentSoftLight}, Dark={StaticResource AccentSoftDark}}" />
+                                <Setter Property="BorderWidth" Value="0" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OnAccentSoftLight}, Dark={StaticResource OnAccentSoftDark}}" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                    <Button Text="Longest" Style="{StaticResource ChipButton}" Command="{Binding SetSortCommand}" CommandParameter="Longest">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsSortLongest}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource AccentSoftLight}, Dark={StaticResource AccentSoftDark}}" />
+                                <Setter Property="BorderWidth" Value="0" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OnAccentSoftLight}, Dark={StaticResource OnAccentSoftDark}}" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                    <Button Text="Highest gain" Style="{StaticResource ChipButton}" Command="{Binding SetSortCommand}" CommandParameter="Highest gain">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsSortHighestGain}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource AccentSoftLight}, Dark={StaticResource AccentSoftDark}}" />
+                                <Setter Property="BorderWidth" Value="0" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource OnAccentSoftLight}, Dark={StaticResource OnAccentSoftDark}}" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <Grid Grid.Row="3" ColumnDefinitions="*,Auto" Margin="2,22,2,12">
+                <Label Text="{Binding TrackCountLabel}" Style="{StaticResource SectionTitle}" VerticalOptions="Center" />
+                <Label Grid.Column="1" Text="{Binding SortDescription}" Style="{StaticResource BodyMuted}" FontSize="11" VerticalOptions="Center" />
+            </Grid>
+
+            <CollectionView Grid.Row="4" ItemsSource="{Binding Tracks}" SelectionMode="None" IsVisible="{Binding HasTracks}" Margin="0,0,0,96">
+                <CollectionView.ItemsLayout><LinearItemsLayout Orientation="Vertical" ItemSpacing="10" /></CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:TrackCardViewModel">
+                        <Border Style="{StaticResource Card}" Padding="8">
+                            <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding Source={x:Reference Page}, Path=BindingContext.OpenTrackCommand}" CommandParameter="{Binding Id}" /></Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="92,*,40" ColumnSpacing="13">
+                                <controls:RouteThumbnailView HeightRequest="88" RouteColor="{Binding RouteColor}" />
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="3">
+                                    <Label Text="{Binding Name}" FontSize="14" FontFamily="OpenSansSemibold" LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding Meta}" Style="{StaticResource BodyMuted}" FontSize="11" Margin="0,0,0,5" />
+                                    <HorizontalStackLayout Spacing="11"><Label Text="{Binding Distance}" FontSize="11" FontFamily="OpenSansSemibold" /><Label Text="{Binding Elevation}" Style="{StaticResource BodyMuted}" FontSize="11" /></HorizontalStackLayout>
+                                </VerticalStackLayout>
+                                <Button Grid.Column="2" Text="•••" FontSize="16" WidthRequest="40" HeightRequest="40" Padding="0" CornerRadius="20" BackgroundColor="Transparent" TextColor="{AppThemeBinding Light={StaticResource MutedLight}, Dark={StaticResource MutedDark}}" VerticalOptions="Start" SemanticProperties.Description="Track actions" Command="{Binding Source={x:Reference Page}, Path=BindingContext.OpenTrackCommand}" CommandParameter="{Binding Id}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <VerticalStackLayout IsVisible="{Binding IsEmpty}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="280" Spacing="10">
+            <Border WidthRequest="64" HeightRequest="64" StrokeThickness="0" StrokeShape="RoundRectangle 20" BackgroundColor="{AppThemeBinding Light={StaticResource AccentSoftLight}, Dark={StaticResource AccentSoftDark}}" HorizontalOptions="Center"><Label Text="⌁" FontSize="30" HorizontalOptions="Center" VerticalOptions="Center" /></Border>
+            <Label Text="No tracks yet" Style="{StaticResource StateTitle}" />
+            <Label Text="Import your first GPX file to build a private, offline track library." Style="{StaticResource StateMessage}" />
+            <Button Text="Import GPX" Style="{StaticResource PrimaryButton}" Command="{Binding ImportCommand}" Margin="0,10,0,0" />
+        </VerticalStackLayout>
+
+        <VerticalStackLayout IsVisible="{Binding HasError}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="280" Spacing="10">
+            <Label Text="Couldn’t load tracks" Style="{StaticResource StateTitle}" />
+            <Label Text="{Binding ErrorMessage}" Style="{StaticResource StateMessage}" />
+            <Button Text="Try again" Style="{StaticResource SecondaryButton}" Command="{Binding RetryCommand}" />
+        </VerticalStackLayout>
+
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{AppThemeBinding Light={StaticResource SectionAccentLight}, Dark={StaticResource SectionAccentDark}}" HorizontalOptions="Center" VerticalOptions="Center" />
+        <Button Text="＋" WidthRequest="54" HeightRequest="54" CornerRadius="18" FontSize="24" Style="{StaticResource PrimaryButton}" Padding="0" HorizontalOptions="End" VerticalOptions="End" Margin="0,0,22,22" SemanticProperties.Description="Import GPX" Command="{Binding ImportCommand}" />
+    </Grid>
+</ContentPage>

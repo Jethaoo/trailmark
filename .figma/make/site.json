@@ -1,0 +1,10 @@
+{
+  "description": "View, manage, and analyze GPX tracks with an intuitive Android app featuring offline maps, detailed stats, and easy GPX import for outdoor enthusiasts.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Copy to Trailmark/MapTiler.local.props and insert your MapTiler key. -->
+    <MapTilerApiKey>YOUR_MAPTILER_API_KEY</MapTilerApiKey>
+  </PropertyGroup>
+</Project>

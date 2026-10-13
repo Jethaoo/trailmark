@@ -1,0 +1,253 @@
+Build the actual **Android GPX Viewer app** based on the provided Figma UI/design.
+
+## Tech Stack
+
+- .NET 10
+- .NET MAUI
+- C#
+- Android
+- MVVM
+- SQLite with `sqlite-net-pcl`
+- MapTiler for maps, using MapTiler Outdoor
+- Local GPX file storage
+- Android GPS/location APIs
+
+The Figma project uses React + Vite + Tailwind CSS. **Do not build the production app in React.** Use the Figma implementation as the visual and UX source of truth, then recreate it natively in .NET MAUI/C#.
+
+## Core Requirements
+
+Build a local-first personal GPX viewer with:
+
+- GPX file import through Android file picker
+- GPX parsing
+- Track/route/waypoint support
+- SQLite local database
+- Original GPX files stored locally
+- Track library
+- Track details
+- MapTiler Outdoor map
+- GPX track rendering
+- Waypoint markers
+- Current GPS location
+- Track statistics
+- Elevation profile
+- GPX sharing/export
+- Delete tracks
+- Search/sort tracks
+- Light/dark/system theme
+- km/miles and meters/feet settings
+
+## Architecture
+
+Use clean MVVM architecture:
+
+```text
+Views/
+ViewModels/
+Models/
+Services/
+Data/
+Helpers/
+Resources/
+```
+
+Separate:
+
+- UI
+- GPX parsing
+- SQLite/database operations
+- Map functionality
+- GPS/location
+- Track calculations
+- File management
+- Settings
+
+Use dependency injection and async operations.
+
+## SQLite
+
+Use a local database:
+
+```text
+gpxviewer.db
+```
+
+Tables:
+
+```text
+Tracks
+TrackPoints
+Waypoints
+Settings
+```
+
+TrackPoints must preserve sequence/order.
+
+Store:
+
+- Track metadata
+- Coordinates
+- Elevation
+- Timestamps
+- Statistics
+- Waypoints
+
+Keep the original `.gpx` file in local app storage for backup/export.
+
+No cloud database.
+
+## GPX
+
+Support:
+
+- `<trk>`
+- `<trkseg>`
+- `<trkpt>`
+- `<rte>`
+- `<rtept>`
+- `<wpt>`
+- elevation
+- timestamps
+- names/descriptions
+- multiple tracks/segments
+
+Handle malformed or incomplete GPX files gracefully.
+
+Calculate:
+
+- Distance
+- Elevation gain/loss
+- Min/max elevation
+- Duration
+- Average speed
+- Start/end coordinates
+
+Do not invent unavailable data.
+
+## Map
+
+Use **MapTiler**, not the OpenStreetMap public tile server.
+
+Default style:
+
+```text
+MapTiler Outdoor
+```
+
+MapTiler API key must be supplied through local configuration and must not be committed to Git.
+
+The map must support:
+
+- GPX route polylines
+- Multiple segments
+- Waypoints
+- Current location
+- Recenter
+- Zoom to track
+- Pan/zoom
+- Bottom statistics sheet
+
+Use SQLite track points to render previously imported tracks. Do not repeatedly parse the original GPX.
+
+## UI
+
+Recreate the provided Figma design as closely as practical.
+
+Important screens:
+
+1. Home/Dashboard
+2. Track Library
+3. Track Details
+4. Full-screen Map
+5. GPX Import/loading/error states
+6. Settings
+
+Preserve the Figma design's:
+
+- Layout
+- Typography
+- Spacing
+- Colors
+- Icons
+- Cards
+- Bottom sheets
+- Navigation
+- Dark/light themes
+- Empty states
+- Loading states
+- Error states
+
+Use native .NET MAUI components/styles rather than embedding the React application.
+
+Do not blindly reproduce Tailwind classes. Translate the visual design into reusable MAUI styles/resources.
+
+## No Backend
+
+Do NOT add:
+
+- Firebase
+- Supabase
+- REST backend
+- Authentication
+- User accounts
+- Cloud synchronization
+
+Everything except map tile requests must remain local.
+
+## Performance
+
+Support GPX files with at least **50,000 track points**.
+
+Use:
+
+- async processing
+- SQLite transactions/bulk inserts
+- efficient queries
+- background processing for large imports
+- efficient map rendering
+
+Do not freeze the UI during GPX import.
+
+## Android
+
+Implement:
+
+- Android file picker
+- Location permissions
+- Current location
+- Android share functionality
+- Proper app storage
+- Android back navigation
+
+Handle denied location permissions and unavailable GPS gracefully.
+
+## Development Rules
+
+Work incrementally.
+
+1. Inspect the existing repository/project.
+2. Set up/repair the .NET MAUI project.
+3. Implement the UI structure.
+4. Implement SQLite.
+5. Implement GPX parsing/import.
+6. Implement track library/details.
+7. Implement MapTiler.
+8. Implement GPS.
+9. Implement export/share.
+10. Implement settings.
+11. Test and optimize.
+
+After each major phase:
+
+- Build the project.
+- Run tests.
+- Fix compilation/runtime errors.
+- Verify the implementation before continuing.
+
+Do not claim a feature is complete unless it builds and works.
+
+Prioritize:
+
+**Figma visual fidelity → reliability → simplicity → performance → extensibility.**
+
+Start by inspecting the repository and the available Figma/design assets, then implement the project rather than merely generating a plan.

@@ -1,0 +1,17 @@
+# .NET / MAUI
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+
+# Local secrets
+Trailmark/MapTiler.local.props
+
+# Node reference app
+node_modules/
+dist/
+
+# OS/editor
+.DS_Store
+Thumbs.db

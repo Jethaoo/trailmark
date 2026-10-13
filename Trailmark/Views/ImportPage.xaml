@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Trailmark.Views.ImportPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Trailmark.ViewModels"
+    x:DataType="vm:ImportViewModel"
+    BackgroundColor="#80121911"
+    Shell.PresentationMode="ModalAnimated"
+    Shell.TabBarIsVisible="False">
+    <ContentPage.Resources><ResourceDictionary><ResourceDictionary.MergedDictionaries><ResourceDictionary Source="../Resources/Styles/Colors.xaml" /><ResourceDictionary Source="../Resources/Styles/Styles.xaml" /></ResourceDictionary.MergedDictionaries></ResourceDictionary></ContentPage.Resources>
+
+    <Grid RowDefinitions="*,Auto">
+        <BoxView><BoxView.GestureRecognizers><TapGestureRecognizer Command="{Binding CloseCommand}" /></BoxView.GestureRecognizers></BoxView>
+        <Border Grid.Row="1" Padding="24,10,24,28" MinimumHeightRequest="350" StrokeThickness="0" StrokeShape="RoundRectangle 28,28,0,0" BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceLight}, Dark={StaticResource SurfaceDark}}">
+            <Grid>
+                <VerticalStackLayout IsVisible="{Binding IsIdle}" Spacing="0">
+                    <BoxView WidthRequest="38" HeightRequest="4" CornerRadius="2" Color="{AppThemeBinding Light={StaticResource LineLight}, Dark={StaticResource LineDark}}" HorizontalOptions="Center" Margin="0,0,0,24" />
+                    <Border WidthRequest="64" HeightRequest="64" StrokeThickness="0" StrokeShape="RoundRectangle 20" BackgroundColor="{AppThemeBinding Light={StaticResource AccentSoftLight}, Dark={StaticResource AccentSoftDark}}" HorizontalOptions="Center"><Label Text="⇧" FontSize="30" HorizontalOptions="Center" VerticalOptions="Center" /></Border>
+                    <Label Text="Import a GPX track" Style="{StaticResource StateTitle}" Margin="0,16,0,0" />
+                    <Label Text="Choose a .gpx file from your device. Your track stays private and stored locally." Style="{StaticResource StateMessage}" Margin="20,8,20,22" />
+                    <Button Text="Choose file" Style="{StaticResource PrimaryButton}" Command="{Binding ChooseFileCommand}" />
+                    <Button Text="Cancel" BackgroundColor="Transparent" TextColor="{AppThemeBinding Light={StaticResource MutedLight}, Dark={StaticResource MutedDark}}" FontFamily="OpenSansSemibold" Command="{Binding CloseCommand}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout IsVisible="{Binding IsImporting}" VerticalOptions="Center" Spacing="12">
+                    <ActivityIndicator IsRunning="True" Color="{AppThemeBinding Light={StaticResource SectionAccentLight}, Dark={StaticResource SectionAccentDark}}" WidthRequest="54" HeightRequest="54" />
+                    <Label Text="Reading your track…" Style="{StaticResource StateTitle}" />
+                    <Label Text="Parsing waypoints, elevation and route data without blocking the app." Style="{StaticResource StateMessage}" />
+                    <ProgressBar Progress="{Binding Progress}" ProgressColor="{AppThemeBinding Light={StaticResource SectionAccentLight}, Dark={StaticResource SectionAccentDark}}" Margin="0,10" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout IsVisible="{Binding IsSuccess}" VerticalOptions="Center" Spacing="10">
+                    <Border WidthRequest="64" HeightRequest="64" StrokeThickness="0" StrokeShape="RoundRectangle 20" BackgroundColor="{AppThemeBinding Light={StaticResource AccentSoftLight}, Dark={StaticResource AccentSoftDark}}" HorizontalOptions="Center"><Label Text="✓" FontSize="28" FontFamily="OpenSansSemibold" HorizontalOptions="Center" VerticalOptions="Center" /></Border>
+                    <Label Text="Track imported" Style="{StaticResource StateTitle}" />
+                    <Label Text="{Binding ImportedTrackName, StringFormat='{0} is ready to explore.'}" Style="{StaticResource StateMessage}" />
+                    <Button Text="View track" Style="{StaticResource PrimaryButton}" Command="{Binding ViewTrackCommand}" Margin="0,12,0,0" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout IsVisible="{Binding IsFailed}" VerticalOptions="Center" Spacing="10">
+                    <Label Text="Couldn’t import this file" Style="{StaticResource StateTitle}" />
+                    <Label Text="{Binding ErrorMessage}" Style="{StaticResource StateMessage}" />
+                    <Button Text="Choose another file" Style="{StaticResource PrimaryButton}" Command="{Binding RetryCommand}" Margin="0,12,0,0" />
+                    <Button Text="Cancel" BackgroundColor="Transparent" TextColor="{AppThemeBinding Light={StaticResource MutedLight}, Dark={StaticResource MutedDark}}" Command="{Binding CloseCommand}" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>
