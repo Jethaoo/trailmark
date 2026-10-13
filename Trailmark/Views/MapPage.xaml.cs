@@ -25,6 +25,8 @@ public partial class MapPage : ContentPage
         WeakReferenceMessenger.Default.Register<MapPage, MapLocationMessage>(this, static (page, message) => _ = page.ShowLocationAsync(message.Value));
         if (viewModel.MapSource.Html is null)
             await viewModel.LoadCommand.ExecuteAsync(null);
+        else
+            await viewModel.RefreshCommand.ExecuteAsync(null);
     }
 
     protected override void OnDisappearing()

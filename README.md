@@ -18,13 +18,13 @@ straight to Settings.
 **A track library that stays tidy.** Every imported file becomes a card with a mini route preview,
 distance and elevation. Search by name, or sort by newest, longest or biggest climb.
 
-![Track library](docs/screenshots/library-dark.png)
+![Track library](docs/screenshots/library-light.png)
 
 **Full track details.** Tap a track for distance, duration, total ascent and descent, average
 speed, and an elevation profile of the whole route. From there you can open it on the map, share
 the original file, or delete it.
 
-![Track details](docs/screenshots/details-dark.png)
+![Track details](docs/screenshots/details-light.png)
 
 **A real map, not a picture of one.** The map is MapTiler — the same cartography used by
 professional outdoor maps — with your route drawn over it as a polyline and your waypoints as
@@ -42,11 +42,11 @@ miles, heights in metres or feet, and four map styles to suit how you ride, walk
 
 ![Settings](docs/screenshots/settings-light.png)
 
-And if you prefer the dark side:
+And every screen has a dark theme too:
 
-![Settings in dark mode](docs/screenshots/settings-dark.png)
+![Dashboard in dark mode](docs/screenshots/home-dark.png)
 
-![Map in dark mode](docs/screenshots/map-dark.jpg)
+![Track map in dark mode](docs/screenshots/map-dark.jpg)
 
 ## Using Trailmark
 

@@ -19,6 +19,7 @@ public partial class MapViewModel(
     ISettingsService settingsService) : BaseViewModel, IQueryAttributable
 {
     private long trackId;
+    private string loadedStyleId = string.Empty;
 
     [ObservableProperty] private string name = "Track map";
     [ObservableProperty] private string distance = "—";
@@ -62,14 +63,52 @@ public partial class MapViewModel(
             throw new InvalidOperationException("This track could not be found.");
 
         AppSettings settings = await settingsService.GetAsync();
+        ApplyTrack(track, settings);
+        loadedStyleId = MapStyles.Normalize(settings.MapStyleId);
+        MapSource = new HtmlWebViewSource { Html = await mapService.CreateTrackMapHtmlAsync(trackId, loadedStyleId) };
+    });
+
+    /// <summary>
+    /// Picks up unit or map-style changes made elsewhere without rebuilding the
+    /// map (and re-downloading tiles) unless the style actually changed.
+    /// </summary>
+    [RelayCommand]
+    private async Task RefreshAsync()
+    {
+        if (trackId == 0 || MapSource.Html is null)
+            return;
+
+        try
+        {
+            Track? track = await trackService.GetTrackAsync(trackId);
+            if (track is null)
+                return;
+
+            AppSettings settings = await settingsService.GetAsync();
+            ApplyTrack(track, settings);
+
+            string styleId = MapStyles.Normalize(settings.MapStyleId);
+            if (!string.Equals(styleId, loadedStyleId, StringComparison.Ordinal))
+            {
+                loadedStyleId = styleId;
+                MapSource = new HtmlWebViewSource { Html = await mapService.CreateTrackMapHtmlAsync(trackId, styleId) };
+            }
+        }
+        catch (Exception)
+        {
+            // Keep whatever was on screen; a failed refresh should not blank the map.
+        }
+    }
+
+    private void ApplyTrack(Track track, AppSettings settings)
+    {
         Name = track.Name;
         Distance = TrackCardViewModel.FormatDistance(track.DistanceMeters ?? 0d, settings.DistanceUnit);
         Ascent = TrackCardViewModel.FormatElevation(track.ElevationGainMeters, settings.ElevationUnit);
         Duration = track.Duration is { } time ? TrackCardViewModel.FormatDuration(time) : "—";
         HighestPoint = TrackCardViewModel.FormatElevation(track.MaxElevationMeters, settings.ElevationUnit);
         WaypointCount = track.WaypointCount.ToString();
-        MapSource = new HtmlWebViewSource { Html = await mapService.CreateTrackMapHtmlAsync(trackId, settings.MapStyleId) };
-    });
+    }
 
     [RelayCommand]
     private void ToggleSheet() => IsSheetExpanded = !IsSheetExpanded;
